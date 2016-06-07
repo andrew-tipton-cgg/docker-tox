@@ -12,43 +12,19 @@
 #
 # Docker hates you and wishes you would just go away and leave it alone.
 
-FROM ubuntu:14.04
+FROM buildpack-deps:jessie
 RUN                                                                         \
     export DEBIAN_FRONTEND=noninteractive;                                  \
     apt-get update;                                                         \
-    apt-get install -y locales;                                             \
-    localedef -i en_US -c -f UTF-8                                          \
-        -A /usr/share/locale/locale.alias en_US.UTF-8;                      \
-                                                                            \
-    export LANG=en_US.UTF-8;                                                \
-    groupadd -r tox --gid=999;                                              \
-    useradd -m -r -g tox --uid=999 tox;                                     \
-                                                                            \
     apt-get -y --no-install-recommends install                              \
-        wget                                                                \
-        libssl-dev                                                          \
-        libffi-dev                                                          \
-        python-pip                                                          \
-        python-software-properties                                          \
-        software-properties-common;                                         \
-    add-apt-repository -y ppa:fkrull/deadsnakes;                            \
-    apt-get update;                                                         \
-    apt-get -y --no-install-recommends install                              \
-        python2.6 python2.6-dev                                             \
         python2.7 python2.7-dev                                             \
-        python3.3 python3.3-dev                                             \
         python3.4 python3.4-dev                                             \
-        python3.5 python3.5-dev;                                            \
+        python3-pip;                                                        \
                                                                             \
-    apt-get -y --no-install-recommends install                              \
-        make build-essential libssl-dev zlib1g-dev libbz2-dev               \
-        libreadline-dev libsqlite3-dev wget curl llvm git;                  \
+    pip3 install tox;                                                       \
                                                                             \
     apt-get clean;                                                          \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*;                          \
-                                                                            \
-    pip install -U pip;                                                     \
-    pip install tox;                                                        \
 # END RUN
 
 
